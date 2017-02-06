@@ -34,12 +34,12 @@ public class PercolationVisualizer {
             for (int i = 0; i < perc.length; i++) {
                 for (int j = 0; j < perc.length; j++) {
                     if (j == (perc.length - 1)){
-                        System.out.print(perc.grid[i][j] + 1);
-                        writer.write(Integer.toString(perc.grid[i][j] + 1));
+                        System.out.print(perc.grid[i][j]);
+                        writer.write(Integer.toString(perc.grid[i][j]));
                     }
                     else {
-                        System.out.print(perc.grid[i][j] + 1 + " ");
-                        writer.write(Integer.toString(perc.grid[i][j] + 1) + " ");
+                        System.out.print(perc.grid[i][j] + " ");
+                        writer.write(Integer.toString(perc.grid[i][j]) + " ");
                     }
                 }
                 System.out.println();

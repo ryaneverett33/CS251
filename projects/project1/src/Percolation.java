@@ -4,7 +4,7 @@
 public class Percolation {
     private QuickUnionUF find;
     //y * x
-    public int[][] grid;   //-1 is closed, 0 is open, 1 is full
+    public int[][] grid;   //0 is closed, 1 is open, 2 is full
     int length;
     public Percolation(int n) {
         if (n <= 0) {
@@ -16,7 +16,7 @@ public class Percolation {
         //make everything false/closed
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                grid[i][j] = -1;
+                grid[i][j] = 0;
             }
         }
         length = n;
@@ -38,7 +38,7 @@ public class Percolation {
         //n-1,n-1 is top right
         int row = (length - x) - 1;
         int col = y;
-        grid[row][col] = 0;
+        grid[row][col] = 1;
         //convert from 2d to 1d
         //int arrPosition = (length * gridY) + gridX;
         //(length * gridX) + gridY;
@@ -48,14 +48,14 @@ public class Percolation {
         //check above
         if (isValidIndex(row-1,col)) {
             int topRow = row - 1, topCol = col;
-            if (grid[topRow][topCol] == 1 || grid[topRow][topCol] == 0) {
+            if (grid[topRow][topCol] == 1 || grid[topRow][topCol] == 2) {
                 //valid, so connect
                 int topArr = (length * topRow) + topCol;
                 find.union(arrPosition,topArr);
-                grid[topRow][topCol] = 1;
+                grid[topRow][topCol] = 2;
                 //if bottom, connect the two
-                if (x == (0)) {
-                    grid[row][col] = 1;
+                if (x == 1) {
+                    grid[row][col] = 2;
                 }
             }
         }
@@ -63,14 +63,14 @@ public class Percolation {
         if (isValidIndex(row+1,col)) {
             //int bottomX  = x, bottomY = (length - (y-1) -1);
             int bottomRow = row + 1, bottomCol = col;
-            if (grid[bottomRow][bottomCol] == 1 || grid[bottomRow][bottomCol] == 0) {
+            if (grid[bottomRow][bottomCol] == 1 || grid[bottomRow][bottomCol] == 2) {
                 //valid, so connect
                 int topArr = (length * bottomRow) + bottomCol;
                 find.union(arrPosition,topArr);
-                grid[bottomRow][bottomCol] = 1;
+                grid[bottomRow][bottomCol] = 2;
                 //if top, connect the two
                 if (x == (length - 1)) {
-                    grid[row][col] = 1;
+                    grid[row][col] = 2;
                 }
             }
         }
@@ -78,14 +78,14 @@ public class Percolation {
         if (isValidIndex(row,col+1)) {
             //int rightX  = x+1, rightY = (length - (y) -1);
             int rightRow = row, rightCol = col+1;
-            if (grid[rightRow][rightCol] == 1 || grid[rightRow][rightCol] == 0) {
+            if (grid[rightRow][rightCol] == 2 || grid[rightRow][rightCol] == 1) {
                 //valid, so connect
                 int topArr = (length * rightRow) + rightCol;
                 find.union(arrPosition,topArr);
-                grid[rightRow][rightCol] = 1;
+                grid[rightRow][rightCol] = 2;
                 //if left, connect the two
-                if (y == 0) {
-                    grid[row][col] = 1;
+                if (y == 1) {
+                    grid[row][col] = 2;
                 }
             }
         }
@@ -93,14 +93,14 @@ public class Percolation {
         if (isValidIndex(row,col-1)) {
             //int leftX  = x-1, leftY = (length - (y) -1);
             int leftRow = row, leftCol = col - 1;
-            if (grid[leftRow][leftCol] == 1 || grid[leftRow][leftCol] == 0) {
+            if (grid[leftRow][leftCol] == 1 || grid[leftRow][leftCol] == 2) {
                 //valid, so connect
                 int topArr = (length * leftRow) + leftCol;
                 find.union(arrPosition,topArr);
-                grid[leftRow][leftCol] = 1;
+                grid[leftRow][leftCol] = 2;
                 //if right, connect the two
                 if (y == (length - 1)) {
-                    grid[row][col] = 1;
+                    grid[row][col] = 2;
                 }
             }
         }
@@ -113,7 +113,7 @@ public class Percolation {
         }
         int gridX = (length - x) - 1;
         int gridY = y;
-        if (grid[gridX][gridY] == 0 || grid[gridX][gridY] == 1) {
+        if (grid[gridX][gridY] == 2 || grid[gridX][gridY] == 1) {
             return true;
         }
         else {
@@ -139,7 +139,7 @@ public class Percolation {
         if (isValidIndex(x,y)) {
             int gridX = (length - x) - 1;
             int gridY = y;
-            if (grid[gridX][gridY] == 1) {
+            if (grid[gridX][gridY] == 2) {
                 return true;
             }
             else {
@@ -153,15 +153,15 @@ public class Percolation {
 
     public boolean percolates() {
         //Analyzes the entire grid and returns true if the whole system percolates
-        if (length == 1 && (grid[0][0] == 0 || grid[0][0] == 1)) {
+        if (length == 1 && (grid[0][0] == 1 || grid[0][0] == 2)) {
             return true;
         }
         for (int i = 0; i < length; i++) {
-            if (grid[0][i] == 1) {
+            if (grid[0][i] == 2) {
                 //int topArr = (length * leftY) + leftX;
                 int p = (length * 0) + i;
                 for (int j = 0; j < length; j++) {
-                    if (grid[length - 1][j] == 1) {
+                    if (grid[length - 1][j] == 2) {
                         int q = (length * (length - 1)) + j;
                         if (find.connected(p,q)) {
                             return true;
