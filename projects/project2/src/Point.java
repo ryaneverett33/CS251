@@ -11,8 +11,8 @@ public class Point implements Comparable<Point>{
     // compare points by slope
     public final Comparator<Point> BY_SLOPE_ORDER = null;    // YOUR DEFINITION HERE
 
-    private final int x;                              // x coordinate
-    private final int y;                              // y coordinate
+    public final int x;                              // x coordinate
+    public final int y;                              // y coordinate
 
     // constructor
     public Point(int x, int y) {
@@ -23,22 +23,53 @@ public class Point implements Comparable<Point>{
     // are the 3 points p, q, and r collinear?
     public static boolean areCollinear(Point p, Point q, Point r) {
         /* YOUR CODE HERE */
-        System.out.println("NOT IMPLEMENTED");
-        return false;
+        //slope = (y2-y1)/(x2-1)
+        float slope1 = (q.y - p.y) / (q.x - p.x);
+        float slope2 = (r.y - q.y) / (r.x - q.x);
+        if (slope1 == slope2) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     // are the 4 points p, q, r, and s collinear?
     public static boolean areCollinear(Point p, Point q, Point r, Point s) {
         /* YOUR CODE HERE */
-        System.out.println("NOT IMPLEMENTED");
-        return false;
+        float slope1 = (q.y - p.y) / (q.x - p.x);
+        float slope2 = (r.y - q.y) / (r.x - q.x);
+        if (slope1 != slope2) {
+            return false;
+        }
+        float slope3 = (s.y - r.y) / (s.x - r.x);
+        if (slope3 != slope2) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
     // is this point lexicographically smaller than that one?
     public int compareTo(Point that) {
+        // -1 this is less than that
+        // 0 equal
+        // 1 this is greater than that
         /* YOUR CODE HERE */
-        System.out.println("NOT IMPLEMENTED");
-        return -1;
+        if (this.x < that.x) {
+            return -1;
+        }
+        if (this.x > that.x) {
+            return -1;
+        }
+        if (this.y < that.y) {
+            return 1;
+        }
+        if (this.y > that.y) {
+            return 1;
+        }
+        return 0;
     }
 
 }
