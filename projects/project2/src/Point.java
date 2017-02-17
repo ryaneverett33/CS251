@@ -56,8 +56,10 @@ public class Point implements Comparable<Point>{
         // -1 this is less than that
         // 0 equal
         // 1 this is greater than that
-        /* YOUR CODE HERE */
-        if (this.x < that.x) {
+
+        //Sort the points according to the angle they make with the origin (p)
+
+        /*if (this.x < that.x) {
             return -1;
         }
         if (this.x > that.x) {
@@ -69,7 +71,10 @@ public class Point implements Comparable<Point>{
         if (this.y > that.y) {
             return 1;
         }
+        return 0;*/
         return 0;
     }
-
+    public String toString() {
+        return "X: " + x + ", Y: " + y;
+    }
 }

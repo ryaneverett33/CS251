@@ -7,12 +7,13 @@ public class Brute {
     // segments to standard output and a file called "visualPoints.txt"
     public static void main(String[] args) {
         //Input N /n x y
-        int n;
-        ArrayList<Point> points = new ArrayList<>(5);
-        int arrCount = 0;
+        Point[] points;
+        int arrCount = 0;           //Same as N
+        int pointIndex = 0;
         if (!StdIn.isEmpty()) {
-            n = StdIn.readInt();
+            arrCount = StdIn.readInt();
         }
+        points = new Point[arrCount];
         while (StdIn.hasNextLine()) {
             String line = StdIn.readLine();
             System.out.println("Read: " + line + ", length: " + line.length());
@@ -21,19 +22,43 @@ public class Brute {
                 firstX = firstX.trim();
                 String firstY = line.substring(6);
                 firstY = firstY.trim();
-                System.out.println("FirstX: " + firstX + ", firstY: " + firstY);
+                //System.out.println("FirstX: " + firstX + ", firstY: " + firstY);
                 int x = Integer.parseInt(firstX);
                 int y = Integer.parseInt(firstY);
-                points.add(new Point(x, y));
-                arrCount = arrCount + 1;
+                points[pointIndex] = (new Point(x, y));
+                pointIndex = pointIndex + 1;
             }
         }
         if (arrCount >= 4) {
+            listSort(points);
+            //for (int i = 0; i < (arrCount - 3); i++) {
             for (int i = 0; i < (arrCount - 3); i++) {
-                if (Point.areCollinear(points.get(i), points.get(i+1), points.get(i+2), points.get(i+3))) {
+                if (Point.areCollinear(points[i], points[i+1], points[i+2], points[i+3])) {
                     System.out.println("Colinear!");
                 }
+                System.out.println("Point[" + i + "] = " + points[i].toString());
             }
         }
+    }
+    public static void listSort (Point[] list) {
+        int n = list.length;
+        for (int j = 1; j < n; j++) {
+            Point key = list[j];
+            int i = j-1;
+            //list [i] > key
+            while ( (i > -1) && ( isGreater(list[i],key) ) ) {
+                list [i+1] = list [i];
+                i--;
+            }
+            list[i+1] = key;
+        }
+    }
+    //true - a is greater
+    //false - b is greater
+    public static boolean isGreater(Point a, Point b) {
+        if (a.x > b.x) {
+            return true;
+        }
+        return false;
     }
 }
