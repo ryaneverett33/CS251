@@ -24,31 +24,28 @@ public class Point implements Comparable<Point>{
     public static boolean areCollinear(Point p, Point q, Point r) {
         /* YOUR CODE HERE */
         //slope = (y2-y1)/(x2-1)
-        float slope1 = (q.y - p.y) / (q.x - p.x);
+        /*float slope1 = (q.y - p.y) / (q.x - p.x);
         float slope2 = (r.y - q.y) / (r.x - q.x);
         if (slope1 == slope2) {
             return true;
         }
         else {
             return false;
+        }*/
+        float slope12 = (float)(q.y - p.y) / (float)(q.x - p.x);
+        float slope23 = (float)(r.y - q.y) / (float)(r.x - q.x);
+        if (slope12 != slope23) {
+            return false;
         }
+        float slope13 = (float)(r.y - p.y) / (float)(r.x - p.x);
+        if (slope13 != slope23) {
+            return false;
+        }
+        return true;
     }
 
     // are the 4 points p, q, r, and s collinear?
     public static boolean areCollinear(Point p, Point q, Point r, Point s) {
-        /* YOUR CODE HERE */
-        /*float slope1 = (q.y - p.y) / (q.x - p.x);
-        float slope2 = (r.y - q.y) / (r.x - q.x);
-        if (slope1 != slope2) {
-            return false;
-        }
-        float slope3 = (s.y - r.y) / (s.x - r.x);
-        if (slope3 != slope2 || slope3 != slope1) {
-            return false;
-        }
-        else {
-            return true;
-        }*/
         float slope12 = (float)(q.y - p.y) / (float)(q.x - p.x);
         float slope23 = (float)(r.y - q.y) / (float)(r.x - q.x);
         if (slope12 != slope23) {

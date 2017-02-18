@@ -37,14 +37,7 @@ public class Brute {
                 for (int j = i+1; j < (arrCount - 2); j++) {
                     for (int k = j+1; k < (arrCount - 1); k++) {
                         for (int l = k+1; l < arrCount; l++) {
-                            /*if (i == 0) {
-                                Point.printSlopes(points[i], points[j], points[k], points[l]);
-                            }*/
                             if (Point.areCollinear(points[i], points[j], points[k], points[l])) {
-                               // System.out.println(String.format("i: %d, j: %d, k: %d, l%d", i, j, k, l));
-                                /*System.out.println(String.format("(%d,%d),(%d,%d),(%d,%d),(%d,%d) are collinear",
-                                        points[i].x,points[i].y, points[j].x, points[j].y, points[k].x, points[k].y,
-                                        points[l].x,points[l].y));*/
                                 String pointStr = formatCollinear(points[i], points[j], points[k], points[l]);
                                 System.out.println(pointStr);
                                 writer.write(pointStr);
@@ -55,15 +48,6 @@ public class Brute {
                 }
             }
             writer.flush();
-            /*System.out.println("Test slope predictions");
-            Point q = points[1];
-            Point p = points[0];
-            float slope12 = (q.y - p.y) / (q.x - p.x);
-            System.out.println("Slope12: " + slope12);
-            System.out.println("Upper portion: " + (q.y - p.y));
-            System.out.println("Lower portion: " + (q.x - p.x));
-            float slope12CAST = (float)(q.y - p.y) / (float)(q.x - p.x);
-            System.out.println("Divisor when casted: " + slope12CAST);*/
         }
     }
     public static void listSort (Point[] list) {
