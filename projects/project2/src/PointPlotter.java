@@ -40,7 +40,8 @@ public class PointPlotter
         StdDraw.setPenRadius(0.01);  // make the points a bit larger
 
         // read in the input
-        String inputFile = "C:\\Users\\Ryan\\Repositories\\cs251\\projects\\project2\\src\\tests\\input50.txt";
+        String inputFile = "C:\\Users\\Ryan\\Repositories\\cs251\\projects\\project2\\src\\collinear-tests\\input400" +
+                ".txt";
         System.setIn(new FileInputStream(inputFile));
 
         int n = StdIn.readInt();

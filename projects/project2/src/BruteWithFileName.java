@@ -1,33 +1,34 @@
 /**
  * Created by Ryan on 2/10/2017.
  */
+
 import java.io.*;
 import java.util.*;
-public class Brute {
+
+//Specifically for use with AlgoStats.java
+public class BruteWithFileName {
     // examines 4 points at a time and checks if they all lie on the same line segment, printing out any such line
     // segments to standard output and a file called "visualPoints.txt"
     public static void main(String[] args) throws Exception{
         //Input N /n x y
-        BufferedWriter writer = new BufferedWriter(new FileWriter("visualPoints.txt"));
+        //BufferedWriter writer = new BufferedWriter(new FileWriter("visualPoints.txt"));
 
         //Debug read in
         /*String inputFile = "C:\\Users\\Ryan\\Repositories\\cs251\\projects\\project2\\src\\tests\\input50.txt";
         System.setIn(new FileInputStream(inputFile));*/
 
-
+        Scanner s = new Scanner(new File(args[0]));
         Point[] points;
         int arrCount = 0;           //Same as N
         int pointIndex = 0;
-        if (!StdIn.isEmpty()) {
-            arrCount = StdIn.readInt();
-        }
+        arrCount = s.nextInt();
         points = new Point[arrCount];
 
 
-        while (StdIn.hasNextLine()) {
-            String line = StdIn.readLine();
+        while (s.hasNextLine()) {
+            String line = s.nextLine();
             //System.out.println("Read: " + line + ", length: " + line.length());
-            if (!line.equals("")) {
+            if (!line.equals("") || !line.isEmpty()) {
                 String firstX = line.substring(0,6);
                 firstX = firstX.trim();
                 String firstY = line.substring(6);
@@ -42,16 +43,16 @@ public class Brute {
         if (arrCount >= 4) {
             //listSort(points);
             Arrays.sort(points);
-            for (int i = 0; i < arrCount - 3; i++) {
+            for (int i = 0; i < arrCount - 3 ; i++) {
                 for (int j = i+1; j < arrCount - 2; j++) {
                     for (int k = j+1; k < arrCount - 1; k++) {
                         for (int l = k+1; l < arrCount; l++) {
                             boolean collinear = Point.areCollinear(points[i], points[j], points[k], points[l]);
                             if (collinear) {
                                 String pointStr = formatCollinear(points[i], points[j], points[k], points[l]);
-                                System.out.println(pointStr);
-                                writer.write(pointStr);
-                                writer.newLine();
+                                //System.out.println(pointStr);
+                                //writer.write(pointStr);
+                                //writer.newLine();
                             }
                             else {
                                 //check individual cases
@@ -78,7 +79,7 @@ public class Brute {
                     }
                 }
             }
-            writer.flush();
+            //writer.flush();
         }
     }
     public static void listSort (Point[] list) {
