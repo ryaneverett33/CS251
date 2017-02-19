@@ -13,8 +13,10 @@ public class Point implements Comparable<Point>{
         @Override
         //Sort the points according to the angle they make with the origin (p)
         public int compare(Point a, Point b) {
-            float slopeToA = (float)(a.y - y) / (float)(a.x - x);
-            float slopeToB = (float)(b.y - y) / (float)(b.x - x);
+            //float slopeToA = (float)(a.y - y) / (float)(a.x - x);
+            //float slopeToB = (float)(b.y - y) / (float)(b.x - x);
+            double slopeToA = calcSlope(a);
+            double slopeToB = calcSlope(b);
             if (slopeToA > slopeToB) {
                 return 1;
             }
@@ -60,13 +62,17 @@ public class Point implements Comparable<Point>{
 
     // are the 4 points p, q, r, and s collinear?
     public static boolean areCollinear(Point p, Point q, Point r, Point s) {
-        float slope12 = (float)(q.y - p.y) / (float)(q.x - p.x);
-        float slope23 = (float)(r.y - q.y) / (float)(r.x - q.x);
+        //float slope12 = (float)(q.y - p.y) / (float)(q.x - p.x);
+        //float slope23 = (float)(r.y - q.y) / (float)(r.x - q.x);
+        double slope12 = p.calcSlope(q);
+        double slope23 = q.calcSlope(r);
         if (slope12 != slope23) {
             return false;
         }
-        float slope34 = (float)(s.y - r.y) / (float)(s.x - r.x);
-        float slope13 = (float)(r.y - p.y) / (float)(r.x - p.x);
+        //float slope34 = (float)(s.y - r.y) / (float)(s.x - r.x);
+        //float slope13 = (float)(r.y - p.y) / (float)(r.x - p.x);
+        double slope34 = r.calcSlope(s);
+        double slope13 = p.calcSlope(r);
         if (slope34 != slope13) {
             return false;
         }
@@ -74,8 +80,10 @@ public class Point implements Comparable<Point>{
         if (slope23 != slope34) {
             return false;
         }
-        float slope14 = (float)(s.y - p.y) / (float)(s.x - p.x);
-        float slope24 = (float)(s.y - q.y) / (float)(s.x - q.x);
+        //float slope14 = (float)(s.y - p.y) / (float)(s.x - p.x);
+        //float slope24 = (float)(s.y - q.y) / (float)(s.x - q.x);
+        double slope14 = p.calcSlope(s);
+        double slope24 = q.calcSlope(s);
         if (slope14 != slope24) {
             return false;
         }
@@ -101,6 +109,9 @@ public class Point implements Comparable<Point>{
         // 0 equal
         // 1 this is greater than that
 
+        //segment. The order meant here is the lexicographical order on the
+        //points coordinates that puts points in ascending order first by x coordinate and then followed by y coordinate
+        //(if x coordinates are equal)
         if (this.x < that.x) {
             return -1;
         }
@@ -114,10 +125,25 @@ public class Point implements Comparable<Point>{
         if (this.y > that.y) {
             return 1;
         }
+
         return 0;
     }
     public String toString() {
         //(%d, %d)
         return String.format("(%d, %d)", this.x, this.y);
+    }
+    public Double calcSlope(Point other) {
+        if (x == other.x && y == other.y) {
+            return Double.NEGATIVE_INFINITY;
+        }
+        else if (y == other.y) {
+            return 0d;
+        }
+        else if (x == other.x) {
+            return Double.POSITIVE_INFINITY;
+        }
+        else {
+            return (double)(other.y - y) / (double) (other.x - x);
+        }
     }
 }

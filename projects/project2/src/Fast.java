@@ -14,7 +14,7 @@ public class Fast {
         BufferedWriter writer = new BufferedWriter(new FileWriter("visualPoints.txt"));
         Point[] points;
         int arrCount = 0;           //Same as N
-        /*int pointIndex = 0;
+        int pointIndex = 0;
         if (!StdIn.isEmpty()) {
             arrCount = StdIn.readInt();
         }
@@ -23,7 +23,7 @@ public class Fast {
             String line = StdIn.readLine();
             //System.out.println("Read: " + line + ", length: " + line.length());
             if (!line.equals("")) {
-                String firstX = line.substring(0,5);
+                String firstX = line.substring(0,6);
                 firstX = firstX.trim();
                 String firstY = line.substring(6);
                 firstY = firstY.trim();
@@ -33,7 +33,7 @@ public class Fast {
                 points[pointIndex] = (new Point(x, y));
                 pointIndex = pointIndex + 1;
             }
-        }*/
+        }
         //Debug create
 
         //input6.txt
@@ -55,7 +55,7 @@ public class Fast {
          3000   4000
         14000  15000
          6000   7000*/
-        arrCount = 8;
+        /*arrCount = 8;
         points = new Point[arrCount];
         points[0] = new Point(10000, 0);
         points[1] = new Point(0, 10000);
@@ -64,7 +64,7 @@ public class Fast {
         points[4] = new Point(20000, 21000);
         points[5] = new Point(3000, 4000);
         points[6] = new Point(14000, 15000);
-        points[7] = new Point(6000, 7000);
+        points[7] = new Point(6000, 7000);*/
 
         Arrays.sort(points);
         //debug print points
@@ -83,9 +83,11 @@ public class Fast {
             int firstPointer = 0;
 
             while (lastIndex < arrCount) {
-                float headSlope = calcSlope(angleSorted[i], angleSorted[firstIndex]);
+                //float headSlope = calcSlope(angleSorted[i], angleSorted[firstIndex]);
+                double headSlope = angleSorted[i].calcSlope(angleSorted[firstIndex]);
                 //check angles against firstSlope
-                while (lastIndex < arrCount && (calcSlope(angleSorted[i],angleSorted[lastIndex]) == headSlope)) {
+                //while (lastIndex < arrCount && (calcSlope(angleSorted[i],angleSorted[lastIndex]) == headSlope)) {
+                while (lastIndex < arrCount && (angleSorted[i].calcSlope(angleSorted[lastIndex]) == headSlope)) {
                     //point is colinear
                     //check for more colinear points.
                     // If a point isn't colinear, we go to the conditional and check if it's a valid segment
@@ -95,9 +97,10 @@ public class Fast {
                 if (lastIndex - firstIndex >= 3) {
                     //we can have THREE or more colinear segments
                     //is valid, add points
-                    float pointerSlope = Float.NEGATIVE_INFINITY;
+                    double pointerSlope = Double.NEGATIVE_INFINITY;
                     while (firstPointer < i) {
-                        pointerSlope = calcSlope(angleSorted[i], angleSorted[firstPointer]);
+                        //pointerSlope = calcSlope(angleSorted[i], angleSorted[firstPointer]);
+                        pointerSlope = angleSorted[i].calcSlope(angleSorted[firstPointer]);
                         if (pointerSlope < headSlope) firstPointer++;
                         else break;
                     }
@@ -129,7 +132,7 @@ public class Fast {
             writer.flush();
         }
     }
-    public static float calcSlope(Point a, Point b) {
+    public static double calcSlope(Point a, Point b) {
         float debugFloat = (float)(b.y - a.y) / (float)(b.x - a.x);
         return debugFloat;
     }

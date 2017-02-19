@@ -40,7 +40,7 @@ public class PointPlotter
         StdDraw.setPenRadius(0.01);  // make the points a bit larger
 
         // read in the input
-        String inputFile = "C:\\Users\\Ryan\\Repositories\\cs251\\projects\\project2\\src\\input8.txt";
+        String inputFile = "C:\\Users\\Ryan\\Repositories\\cs251\\projects\\project2\\src\\tests\\input50.txt";
         System.setIn(new FileInputStream(inputFile));
 
         int n = StdIn.readInt();
@@ -59,7 +59,7 @@ public class PointPlotter
         try 
         {
             //open file which has output of Fast or Brute
-            File file = new File("C:\\Users\\Ryan\\Repositories\\cs251\\projects\\project2\\visualPoints.txt");
+            File file = new File("C:\\Users\\Ryan\\Repositories\\cs251\\projects\\project2\\src\\visualPoints.txt");
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             StringBuffer stringBuffer = new StringBuffer();
