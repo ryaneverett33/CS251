@@ -17,10 +17,7 @@
  *  PURDUE CS 25100 PROJECT 2, FEBRUARY 6, SPRING 2017 
  *
  *************************************************************************/
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class PointPlotter 
@@ -32,10 +29,10 @@ public class PointPlotter
     public static void draw(int x,int y) {
         StdDraw.point(x, y);
     }
-    public static void main(String[] args) 
+    public static void main(String[] args)  throws Exception
     {
 
-        
+        System.out.println("Starting");
         // rescale coordinates and turn on animation mode
         StdDraw.setXscale(0, 32768);
         StdDraw.setYscale(0, 32768);
@@ -43,8 +40,11 @@ public class PointPlotter
         StdDraw.setPenRadius(0.01);  // make the points a bit larger
 
         // read in the input
+        String inputFile = "C:\\Users\\Ryan\\Repositories\\cs251\\projects\\project2\\src\\input8.txt";
+        System.setIn(new FileInputStream(inputFile));
+
         int n = StdIn.readInt();
-        while (!StdIn.isEmpty()) 
+        while (!StdIn.isEmpty())
         {
             int x = StdIn.readInt();
             int y= StdIn.readInt();
@@ -55,15 +55,16 @@ public class PointPlotter
 
         StdDraw.setPenRadius();
         StdDraw.setPenColor(StdDraw.RED);
-        
+        System.out.println("Trying");
         try 
         {
             //open file which has output of Fast or Brute
-            File file = new File("visualPoints.txt");
+            File file = new File("C:\\Users\\Ryan\\Repositories\\cs251\\projects\\project2\\visualPoints.txt");
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             StringBuffer stringBuffer = new StringBuffer();
             String line;
+            System.out.println("Got file");
             StringTokenizer st;
             //coordinates for points in a line
             int [] coordinates = new int [100];
@@ -87,6 +88,9 @@ public class PointPlotter
         catch (IOException e) 
         {
             e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.out.println("Exception " + e.getMessage());
         }
         // display
         StdDraw.show(0);

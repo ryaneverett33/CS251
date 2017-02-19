@@ -9,7 +9,21 @@ import java.util.Comparator;
 
 public class Point implements Comparable<Point>{
     // compare points by slope
-    public final Comparator<Point> BY_SLOPE_ORDER = null;    // YOUR DEFINITION HERE
+    public final Comparator<Point> BY_SLOPE_ORDER = new Comparator<Point>() {
+        @Override
+        //Sort the points according to the angle they make with the origin (p)
+        public int compare(Point a, Point b) {
+            float slopeToA = (float)(a.y - y) / (float)(a.x - x);
+            float slopeToB = (float)(b.y - y) / (float)(b.x - x);
+            if (slopeToA > slopeToB) {
+                return 1;
+            }
+            if (slopeToA < slopeToB) {
+                return -1;
+            }
+            return 0;
+        }
+    };
 
     public final int x;                              // x coordinate
     public final int y;                              // y coordinate
@@ -87,24 +101,23 @@ public class Point implements Comparable<Point>{
         // 0 equal
         // 1 this is greater than that
 
-        //Sort the points according to the angle they make with the origin (p)
-
-        /*if (this.x < that.x) {
+        if (this.x < that.x) {
             return -1;
         }
         if (this.x > that.x) {
-            return -1;
-        }
-        if (this.y < that.y) {
             return 1;
+        }
+
+        if (this.y < that.y) {
+            return -1;
         }
         if (this.y > that.y) {
             return 1;
         }
-        return 0;*/
         return 0;
     }
     public String toString() {
-        return "X: " + x + ", Y: " + y;
+        //(%d, %d)
+        return String.format("(%d, %d)", this.x, this.y);
     }
 }
