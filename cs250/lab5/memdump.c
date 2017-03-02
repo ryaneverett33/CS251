@@ -79,10 +79,17 @@ int main() {
   x.b = '0';
   x.p = &x.i;
   strcpy(str, "Hello world\n");
+  printf("&str=0x%x\n", &str);								//str
+  printf("&a=0x%x\n", &a);									//a
+  printf("&b=0x%x\n", &b);									//b	
+  printf("&y=0x%x\n", &y);									//Moved
   printf("&x=0x%x\n", &x.a);
-  printf("&y=0x%x\n", &y);
-
-  memdump((char *) &x.a, 64);
+  printf("&x.i=0x%x\n", &x.i);								//x.i
+  printf("&x.b=0x%x\n", &x.b);								//x.b
+  printf("&x.p=0x%x\n", &x.p);								//x.p
+  
+  
+  //memdump((char *) &x.a, 64);
   head = (struct List *) malloc(sizeof(struct List));
   head->str=strdup("Welcome ");
   head->next = (struct List *) malloc(sizeof(struct List));
@@ -90,7 +97,16 @@ int main() {
   head->next->next = (struct List *) malloc(sizeof(struct List));
   head->next->next->str = strdup("cs250");
   head->next->next->next = NULL;
-  printf("head=0x%x\n", head);
+  printf("&head=0x%x\n", head);
+  printf("&head->str=0x%x\n", head->str);					//head->str
+  printf("&head->next=0x%x\n", head->next);					//head->next
+  printf("&head->next->str=0x%x\n", head->next->str);					//head->next->str
+  printf("&head->next->next=0x%x\n", head->next->next);					//head->next->next
+  printf("&head->next->next->str=0x%x\n", head->next->next->str);					//head->next->next->str
+  printf("&head->next->next->next=0x%x\n", head->next->next->next);					//head->next->next->next
+  memdump((char *) &x.a, 64);
   memdump((char*) head, 128);
+  //printf("&x=0x%x\n", &x.a);
+  //printf("&y=0x%x\n", &y);
 }
 
