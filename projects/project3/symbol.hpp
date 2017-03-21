@@ -12,6 +12,7 @@ using namespace std;
 
 class Symbol {
 private:
+	///use std::map instead of this shit
 	std::vector<Key> T;
 	std::vector<Key> subT;
 

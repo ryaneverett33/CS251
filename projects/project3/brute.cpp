@@ -168,12 +168,12 @@ int main(int argc, char *argv[]){
 		cout << "Hello World!" << endl;
 	}*/
 	Brute brute(table_filename);
-	
-	cout << "Created Brute, going to decrypt" << endl;
+
 	brute.decrypt(encrypted);
 	t.toc();
 
-	std::cout << "Elapsed: " << t.elapsed() << std::endl;
+	//Helpful for debugging
+	//std::cout << "Elapsed: " << t.elapsed() << std::endl;
 
 	return 0;
 }
