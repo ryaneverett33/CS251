@@ -2,9 +2,11 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <stdio.h>
 
 #include "key.hpp"
 #include "brute.hpp"
+#include "timer.hpp"
 
 using namespace std;
 
@@ -27,12 +29,13 @@ Brute::Brute(const std::string& filename) {
 void Brute::decrypt(const std::string& encrypted){
 	// your code here
 	char possible[C];
-	char toUse[C];
+	//char toUse[C];
+	word_type toUse;
 	Key keyToFind(encrypted);
-	for (int i = 0; i < C; i++) {
+	/*for (int i = 0; i < C; i++) {
 		possible[i] = 0;
-		toUse[i] = ALPHABET[i];
-	}
+		toUse[i] = ALPHABET[0];
+	}*/
 	//R = size of the Alphabet (32) <key.hpp>
 	//C = amount of characters (EX: "pass" C=4) <key.hpp>
 	//cout << "Looping for: " << pow(R, C) << endl;
@@ -42,6 +45,7 @@ void Brute::decrypt(const std::string& encrypted){
 			//fill possible array
 			if (i == 0) {
 				possible[j] = 0;
+				toUse[j] = 0;
 			}
 			else if (j == (C - 1)) {
 				possible[j] = possible[j] + 1;
@@ -65,17 +69,36 @@ void Brute::decrypt(const std::string& encrypted){
 					possible[j] = possible[j];
 				}
 			}
-			toUse[j] = ALPHABET[possible[j]];
+			//toUse[j] = ALPHABET[possible[j]];
+			toUse[j] = possible[j];
 		}
 		/*for (int j = 0; j < C; j++) {
 			cout << toUse[j] << " ";
 		}*/
 		//cout << endl;
-		Key newKey((string(toUse)));
+		//Key newKey((string(toUse)));
+		Key newKey(false);
+		newKey.m_digit = toUse;
 		Key result = newKey.subset_sum(T, verbose);
-		if (possible[0] == 1) {
-			//Breakpoint for debugging
-		}
+		/*if (i == 5) {
+			cout << "m_digit ";
+			for (int x = 0; x < C; x++) {
+				int foo = t[x];
+				cout << foo << " ";
+			}
+			cout << endl;
+			cout << "toUse ";
+			for (int x = 0; x < C; x++) {
+				int foo = toUse[x];
+				cout << foo << " ";
+			}
+			cout << endl;
+			char orig[C];
+			for (int x = 0; x < C; x++) {
+				orig[x] = ALPHABET[(int)toUse[x]];
+			}
+			cout << "toUse: " << string(orig) << endl;
+		}*/
 		//string encrypt = encrypted;
 		//string usedString = newKey.getString();
 		//string resultString = result.getString();
@@ -87,7 +110,7 @@ void Brute::decrypt(const std::string& encrypted){
 
 			//Use the for loop instead of cout string(toUse) or cout toUse - Weird artifacts
 			for (int i = 0; i < C; i++) {
-				cout << toUse[i];
+				cout << ALPHABET[toUse[i]];
 			}
 			cout << endl;
 		}
@@ -134,6 +157,8 @@ void initialize(int argc, char* argv[]) {
 int main(int argc, char *argv[]){
 	
 	initialize(argc, argv);
+	CPU_timer t;
+	t.tic();
 	
 	//Code here
 	/*if (encrypted.empty() || table_filename.empty() || me.empty()) {
@@ -143,8 +168,12 @@ int main(int argc, char *argv[]){
 		cout << "Hello World!" << endl;
 	}*/
 	Brute brute(table_filename);
+	
 	cout << "Created Brute, going to decrypt" << endl;
 	brute.decrypt(encrypted);
+	t.toc();
+
+	std::cout << "Elapsed: " << t.elapsed() << std::endl;
 
 	return 0;
 }

@@ -129,8 +129,10 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>-DUSE_5_CHARS %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -175,15 +177,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\project3\brute.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\project3\brute.hpp" />
+    <ClInclude Include="..\brute.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\project3\Project 3.vcxproj">
       <Project>{e11446a4-90a1-4cc1-8803-28a900d0d7d2}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\brute.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

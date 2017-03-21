@@ -93,13 +93,16 @@ static inline word_type to_string(const std::string& s) {
 
 class Key {	
 private:
-	word_type m_digit;
-	
 	int bit(int) const;
 
 public:
+	word_type m_digit;
+
     // Default Constructor
 	Key();
+
+	//CUSTOM Empty Constructor
+	Key(bool doNothing);
 
 	// Initialize the Key from a compatible character string
 	Key(const std::string&);
@@ -139,6 +142,10 @@ inline int Key::bit(int i) const {
 
 inline Key::Key() {
 	std::fill(m_digit.begin(), m_digit.end(), 0);
+}
+
+inline Key::Key(bool doNothing) {
+	//constructs object, does nothing
 }
 
 inline Key::Key(const std::string& s) {
