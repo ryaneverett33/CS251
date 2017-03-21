@@ -69,13 +69,25 @@ void Brute::decrypt(const std::string& encrypted){
 		}
 		/*for (int j = 0; j < C; j++) {
 			cout << toUse[j] << " ";
-		}
-		cout << endl;*/
+		}*/
+		//cout << endl;
 		Key newKey((string(toUse)));
 		Key result = newKey.subset_sum(T, verbose);
+		if (possible[0] == 1) {
+			//Breakpoint for debugging
+		}
+		//string encrypt = encrypted;
+		//string usedString = newKey.getString();
+		//string resultString = result.getString();
 		if (result == keyToFind) {
-			for (int x = 0; x < C; x++) {
+			/*for (int x = 0; x < C; x++) {
 				cout << toUse[x];
+			}*/
+			//look at result m_digit
+
+			//Use the for loop instead of cout string(toUse) or cout toUse - Weird artifacts
+			for (int i = 0; i < C; i++) {
+				cout << toUse[i];
 			}
 			cout << endl;
 		}
@@ -131,6 +143,7 @@ int main(int argc, char *argv[]){
 		cout << "Hello World!" << endl;
 	}*/
 	Brute brute(table_filename);
+	cout << "Created Brute, going to decrypt" << endl;
 	brute.decrypt(encrypted);
 
 	return 0;

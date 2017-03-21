@@ -6,18 +6,13 @@
 #include "key.hpp"
 #include "symbol.hpp"
 
-std::string me;
-std::string encrypted;
-std::string table_filename;
-bool verbose = false;
-
 Symbol::Symbol(const std::string& filename) {
-	//T.resize(N);
+	T.resize(N);
 	std::string buffer;
     std::fstream input(filename.c_str(), std::ios::in);
     for (int i = 0; i < N; i++) {
         std::getline(input, buffer);
-        //T[i].set_string(buffer);
+        T[i].set_string(buffer);
     }
     input.close();
 	
@@ -27,6 +22,10 @@ Symbol::Symbol(const std::string& filename) {
 void Symbol::decrypt(const std::string& encrypted){
 	// insert your code here
 }
+
+/*Table::get() {
+	return NULL;
+}*/
 
 void usage(const std::string& error_msg="") {
 	if (!error_msg.empty()) std::cout << "ERROR: " << error_msg << '\n';

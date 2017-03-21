@@ -15,6 +15,10 @@ private:
 public:
 	Brute(const std::string&);
 	void decrypt(const std::string&);
+	std::string me;
+	std::string encrypted;
+	std::string table_filename;
+	bool verbose = false;
 };
 
 #endif

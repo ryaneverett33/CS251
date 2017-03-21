@@ -17,6 +17,14 @@
 static constexpr int B=5;  // number of bits per character
 static constexpr int R=32; // size of alphabet (2^B)
 
+#ifdef USE_4_CHARS
+
+static constexpr int C = 4;  // number of characters per word
+static constexpr int N = 20; // number of bits per word
+#define C_IS_SET
+
+#endif
+
 #ifdef USE_6_CHARS
 
 static constexpr int C=6;  // number of characters per word
@@ -110,6 +118,9 @@ public:
 	// Print the contents of the Key (for debugging mostly)
     void show() const;
 
+	// Get the string version of the Key (CUSTOM debug)
+	std::string getString();
+
 	// Assign the Key generated from the argument string to the current Key
 	void set_string(const std::string&);
 
@@ -200,6 +211,13 @@ inline void Key::show() const {
     std::cout << '\n';
 }
 
+inline std::string Key::getString() {
+	std::string s = "";
+	for (int i = 0; i < C; i++) {
+		s += ALPHABET[m_digit[i]];
+	}
+	return s;
+}
 
 
 #endif // KEY_HPP
