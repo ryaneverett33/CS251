@@ -34,9 +34,11 @@ void Symbol::decrypt(const std::string& encrypted) {
 	if (C % 2 != 0)
 		half = half + 1;
 	int len = pow(R, half);
+	//int c = C;
 	word_type plaintext;
 	Key toFind(encrypted);
 	Key newKey(false);
+	Key result(false);
 	//fill plaintext
 	for (int i = 0; i < C; i++) {
 		plaintext[i] = 0;
@@ -44,8 +46,6 @@ void Symbol::decrypt(const std::string& encrypted) {
 	for (int i = 0; i < len; i++) {
 		bool overflow = false;
 		for (int j = (half - 1); j > -1; j--) {
-			/*if (plaintext[1] == R)
-				int five = 2;*/
 			if (i == 0) {
 				plaintext[j] = 0;
 			}
@@ -73,7 +73,8 @@ void Symbol::decrypt(const std::string& encrypted) {
 			}
 		}
 		newKey.m_digit = plaintext;
-		Key result = newKey.subset_sum(T, verbose);
+		result = newKey.subset_sum(T, verbose);
+		if (plaintext[0] == 5 && plaintext[1] == 24 && plaintext[2] == )
 		//map.insert(result.getString(), WordToString(plaintext));
 		//string resStr = result.getString();
 		//string plainStr = WordToString(plaintext);
@@ -84,11 +85,15 @@ void Symbol::decrypt(const std::string& encrypted) {
 		half = half - 1;
 	}
 	len = pow(R, half);
+	cout << "Searching " << endl;
+	auto foo = map.find("exvaa");
+	if (foo != map.end()) {
+		cout << foo->first << endl;
+		cout << foo->second << endl;
+	}
 	for (int i = 0; i < len; i++) {
 		bool overflow = false;
 		for (int j = (C - 1); (j > half - 1); j--) {
-			/*if (plaintext[1] == R)
-			int five = 2;*/
 			if (i == 0) {
 				plaintext[j] = 0;
 			}
@@ -116,6 +121,19 @@ void Symbol::decrypt(const std::string& encrypted) {
 					continue;
 				}
 			}
+		}
+		newKey.m_digit = plaintext;
+		result = newKey.subset_sum(T, verbose);
+		Key diff = toFind - result;
+		auto search = map.find(diff.getString());
+		if (search != map.end()) {
+			string resultAgain = diff.getString();
+			cout << "Found!" << endl;
+			cout << "First: " << search->first << endl;
+			cout << "Second: " << search->second << endl;
+			Key blah = search->second;
+			blah += diff;
+			cout << "Blah: " << blah.getString() << endl;
 		}
 	}
 	cout << "Finished second loop" << endl;

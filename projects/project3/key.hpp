@@ -117,6 +117,9 @@ public:
 	// Comparison operators
 	bool operator==(const Key&) const;
 	bool operator<(const Key&) const;
+
+	//Subtraction Operator (CUSTOM)
+	Key operator-(const Key&);
 	
 	// Print the contents of the Key (for debugging mostly)
     void show() const;
@@ -172,6 +175,21 @@ inline bool Key::operator==(const Key& other) const {
 
 inline bool Key::operator<(const Key& other) const {
 	return m_digit < other.m_digit; // lexicographical order
+}
+
+inline Key Key::operator-(const Key& other) {
+	Key diff(false);
+	for (int i = 0; i < C; ++i) {
+		int res = m_digit[i] - other.m_digit[i];
+		if (res < 0 && i > 0) {
+			if (m_digit[i - 1] > 0) {
+				m_digit[i - 1] = m_digit[i] - 1;
+				res = res + R;
+			}
+		}
+		diff.m_digit[i] = res;
+	}
+	return diff;
 }
 
 Key& Key::operator+=(const Key& other) {

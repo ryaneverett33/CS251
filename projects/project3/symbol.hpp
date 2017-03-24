@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <functional>
 #include <unordered_map>
 
 #include "key.hpp"
