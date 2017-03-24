@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "key.hpp"
 
@@ -14,7 +15,7 @@ class Symbol {
 private:
 	///use std::map instead of this shit
 	std::vector<Key> T;
-	std::vector<Key> subT;
+	std::unordered_map<string, string> map;
 
 public:
 	Symbol(const std::string&);
@@ -22,34 +23,15 @@ public:
 	std::string me;
 	std::string encrypted;
 	std::string table_filename;
+	int pow(int x, int y);
 };
 
-class Table {
-public:
-	/*Table();
-	void put();
-	Key get();
-	int size;
-
-	inline Table() {
-
-	}*/
-
-};
-class Value {
-public:
-	/*Value(Key value , Value *next);
-	Value *next;
-	Key value;
-	bool hasNext();
-
-	inline bool hasNext() {
-		return next != null;
+inline static string WordToString(word_type word) {
+	std::string s = "";
+	for (int foo = 0; foo < C; foo++) {
+		s = s + ALPHABET[word[foo]];
 	}
-	inline Value(Key value, Value *next) {
-		this.value = value;
-		this.next = next;
-	}*/
-};
+	return s;
+}
 
 #endif

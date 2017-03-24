@@ -219,9 +219,14 @@ inline void Key::show() const {
 }
 
 inline std::string Key::getString() {
+	/*char data[C];
+	for (int foo = 0; foo < C; foo++) {
+		data[foo] = ALPHABET[m_digit[foo]];
+	}
+	return std::string(data);*/
 	std::string s = "";
-	for (int i = 0; i < C; i++) {
-		s += ALPHABET[m_digit[i]];
+	for (int foo = 0; foo < C; foo++) {
+		s = s + ALPHABET[m_digit[foo]];
 	}
 	return s;
 }
