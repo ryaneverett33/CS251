@@ -15,10 +15,11 @@ using namespace std;
 class Symbol {
 private:
 	///use std::map instead of this shit
-	std::vector<Key> T;
+	
 	std::unordered_map<string, string> map;
 
 public:
+	std::vector<Key> T;
 	Symbol(const std::string&);
 	void decrypt(const std::string&);
 	std::string me;

@@ -39,6 +39,7 @@ void Symbol::decrypt(const std::string& encrypted) {
 	Key toFind(encrypted);
 	Key newKey(false);
 	Key result(false);
+	bool look = false;
 	//fill plaintext
 	for (int i = 0; i < C; i++) {
 		plaintext[i] = 0;
@@ -74,7 +75,7 @@ void Symbol::decrypt(const std::string& encrypted) {
 		}
 		newKey.m_digit = plaintext;
 		result = newKey.subset_sum(T, verbose);
-		if (plaintext[0] == 15 && plaintext[1] == 0 && plaintext[2] == 18) {
+		/*if (plaintext[0] == 15 && plaintext[1] == 0 && plaintext[2] == 18) {
 			cout << "pass half" << endl;
 			for (int x = 0; x < C; x++) {
 				cout << ALPHABET[plaintext[x]];
@@ -85,28 +86,47 @@ void Symbol::decrypt(const std::string& encrypted) {
 				cout << ALPHABET[result.m_digit[x]];
 			}
 			cout << endl;
-		}
+			look = true;
+		}*/
 		//map.insert(result.getString(), WordToString(plaintext));
 		//string resStr = result.getString();
 		//string plainStr = WordToString(plaintext);
 		map[result.getString()] = WordToString(plaintext);
+		/*if (look) {
+			string exists = map[result.getString()];
+			if (exists.empty()) {
+				cout << "Doesn't exist in table" << endl;
+			}
+			else {
+				cout << "Exists in table" << endl;
+			}
+			look = false;
+		}*/
 	}
-	cout << "Finished first loop" << endl;
+	//cout << "Finished first loop" << endl;
 	if (C % 2 != 0) {
 		half = half - 1;
 	}
 	len = pow(R, half);
-	cout << "Searching " << endl;
-	auto foo = map.find("exvaa");
+	/*cout << "Searching " << endl;
+	auto foo = map.find("jfwp0");
 	if (foo != map.end()) {
-		cout << foo->first << endl;
-		cout << foo->second << endl;
+		cout << "Search found in map: " << endl;
+		cout << "Key: " << foo->first << endl;
+		cout << "Value: " << foo->second << endl;
+	}*/
+
+	//reset plaintext
+	for (int foo = 0; foo < C; foo++) {
+		plaintext[foo] = 0;
 	}
+
 	for (int i = 0; i < len; i++) {
 		bool overflow = false;
 		for (int j = (C - 1); (j > half - 1); j--) {
 			if (i == 0) {
 				plaintext[j] = 0;
+				continue;
 			}
 			else if (j == (C - 1) && !overflow) {
 				plaintext[j] = plaintext[j] + 1;
@@ -136,27 +156,26 @@ void Symbol::decrypt(const std::string& encrypted) {
 		/*for (int s = 0; s < C; s++) {
 			cout << ALPHABET[plaintext[s]];
 		}
-		cout << " ";
+		cout << endl;*/
 		newKey.m_digit = plaintext;
 		result = newKey.subset_sum(T, verbose);
-		for (int s = 0; s < C; s++) {
-			cout << ALPHABET[result.m_digit[s]];
-		}
-		cout << endl;*/
-		Key sub = toFind - result;
-		if (sub.getString() == "jfwp0") {
-			cout << "HOLY SHIT" << endl;
-		}
+		/*if (plaintext[3] == 18 && plaintext[4] == 22) {
+			cout << "pass other half" << endl;
+			for (int q = 0; q < C; q++) {
+				cout << ALPHABET[result.m_digit[q]];
+			}
+			cout << endl;
+		}*/
 		Key diff = toFind - result;
 		auto search = map.find(diff.getString());
 		if (search != map.end()) {
 			string resultAgain = diff.getString();
-			cout << "Found!" << endl;
-			cout << "First: " << search->first << endl;
-			cout << "Second: " << search->second << endl;
-			Key blah = search->second;
-			blah += diff;
-			cout << "Blah: " << blah.getString() << endl;
+			//cout << "Found!" << endl;
+			//cout << "First: " << search->first << endl;
+			//cout << "Second: " << search->second << endl;
+			Key combined = newKey + search->second;
+			//cout << "Combined: " << combined.getString() << endl;
+			cout << combined.getString() << endl;
 		}
 	}
 	//try and find in map
@@ -176,7 +195,7 @@ void Symbol::decrypt(const std::string& encrypted) {
 	else {
 		cout << "Could not find passw encrypted" << endl;
 	}*/
-	cout << "Finished second loop" << endl;
+	//cout << "Finished second loop" << endl;
 	int five = 5;
 }
 
@@ -211,11 +230,30 @@ void initialize(int argc, char* argv[]) {
 int main(int argc, char *argv[]){
 	
 	initialize(argc, argv);
-	cout << "Initialize" << endl;
+	//cout << "Initialize" << endl;
 	Symbol sym(table_filename);
-	cout << "Created" << endl;
+	//cout << "Created" << endl;
 	sym.decrypt(encrypted);
-	cout << "Decrypted" << endl;
+	//cout << "Decrypted" << endl;
+
+	/*Key firstHalf = Key(string("pasaa")).subset_sum(sym.T, verbose);
+	Key secondHalf = Key(string("aaasw")).subset_sum(sym.T, verbose);
+	Key encKey(encrypted);
+
+	cout << "Encrypted: " << encrypted << endl;
+	cout << "Encrypted First Half: " << firstHalf.getString() << endl;
+	cout << "Encrypted Second Half: " << secondHalf.getString() << endl;
+
+	Key keyFirstSecond = firstHalf + secondHalf;
+	cout << "First Half + Second Half: " << keyFirstSecond.getString() << endl;
+	Key keySecondFirst = secondHalf + firstHalf;
+	cout << "Second Half + First Half: " << keySecondFirst.getString() << endl;
+	Key encMinusFirst = encKey - firstHalf;
+	Key encMinusLast = encKey - secondHalf;
+	cout << "Encrypted - First Half: " << encMinusFirst.getString() << endl;
+	cout << "Encrypted - Second Half: " << encMinusLast.getString() << endl;*/
+
+
 	/*Key b(string("bbbbb"));
 	Key a(string("aaaaa"));
 
@@ -236,6 +274,22 @@ int main(int argc, char *argv[]){
 	// insert your code here
 	/*int* blah;
 	scanf("%d", blah);*/
+
+	/*Key a(false);
+	a.m_digit = { 1,1,1,1,1 };
+	Key res = a + a;
+	for (int i = 0; i < C; i++) {
+		cout << (int)res.m_digit[i];
+	}
+	cout << endl;
+	Key full(false);
+	full.m_digit = { R, R, R, R, R };
+	res = full + full;
+	for (int i = 0; i < C; i++) {
+		cout << ALPHABET[res.m_digit[i]];
+	}
+	cout << endl;*/
+
 	return 0;
 }
 

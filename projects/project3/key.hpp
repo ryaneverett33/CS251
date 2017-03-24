@@ -120,6 +120,7 @@ public:
 
 	//Subtraction Operator (CUSTOM)
 	Key operator-(const Key&);
+	Key operator+(const Key&);
 	
 	// Print the contents of the Key (for debugging mostly)
     void show() const;
@@ -179,17 +180,36 @@ inline bool Key::operator<(const Key& other) const {
 
 inline Key Key::operator-(const Key& other) {
 	Key diff(false);
-	for (int i = 0; i < C; ++i) {
-		int res = m_digit[i] - other.m_digit[i];
-		if (res < 0 && i > 0) {
-			if (m_digit[i - 1] > 0) {
-				m_digit[i - 1] = m_digit[i - 1] - 1;
-				res = res + R;
+	word_type copy = m_digit;
+	for (int i = C - 1; i > -1; --i) {
+		if (copy[i] >= other.m_digit[i]) {
+			diff.m_digit[i] = copy[i] - other.m_digit[i];
+		}
+		else {
+			if (i == 0) {
+				copy[i] = copy[i] + R;
+				diff.m_digit[i] = copy[i] - other.m_digit[i];
+			}
+			else {
+				copy[i - 1] = copy[i - 1] - 1;
+				copy[i] = copy[i] + R;
+				//now do the subtraction
+				diff.m_digit[i] = copy[i] - other.m_digit[i];
 			}
 		}
-		diff.m_digit[i] = res;
 	}
 	return diff;
+}
+inline Key Key::operator+(const Key& other) {
+	Key sum(false);
+	int t;
+	int carry = 0;
+	for (int i = C - 1; i >= 0; --i) {
+		t = m_digit[i];
+		sum.m_digit[i] = (t + other.m_digit[i] + carry) % R;
+		carry = (t + other.m_digit[i] + carry) >= R;
+	}
+	return sum;
 }
 
 Key& Key::operator+=(const Key& other) {
