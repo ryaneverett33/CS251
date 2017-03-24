@@ -45,34 +45,7 @@ void Symbol::decrypt(const std::string& encrypted) {
 		plaintext[i] = 0;
 	}
 	for (int i = 0; i < len; i++) {
-		bool overflow = false;
-		for (int j = (half - 1); j > -1; j--) {
-			if (i == 0) {
-				plaintext[j] = 0;
-			}
-			else if (j == (half - 1)) {
-				plaintext[j] = plaintext[j] + 1;
-				if (plaintext[j] == R) {
-					plaintext[j] = 0;
-					overflow = true;
-				}
-			}
-			else {
-				if (overflow) {
-					plaintext[j] = plaintext[j] + 1;
-					if (plaintext[j] == (R)) {
-						plaintext[j] = 0;
-						overflow = true;
-					}
-					else {
-						overflow = false;
-					}
-				}
-				else {
-					continue;
-				}
-			}
-		}
+		Symbol::getString(i, true, plaintext);
 		newKey.m_digit = plaintext;
 		result = newKey.subset_sum(T, verbose);
 		/*if (plaintext[0] == 15 && plaintext[1] == 0 && plaintext[2] == 18) {
@@ -91,7 +64,8 @@ void Symbol::decrypt(const std::string& encrypted) {
 		//map.insert(result.getString(), WordToString(plaintext));
 		//string resStr = result.getString();
 		//string plainStr = WordToString(plaintext);
-		map[result.getString()] = WordToString(plaintext);
+		//map[result.getString()] = WordToString(plaintext);
+		map[Symbol::fromWordType(result.m_digit, true)] = i;
 		/*if (look) {
 			string exists = map[result.getString()];
 			if (exists.empty()) {
@@ -122,8 +96,8 @@ void Symbol::decrypt(const std::string& encrypted) {
 	}
 
 	for (int i = 0; i < len; i++) {
-		bool overflow = false;
-		for (int j = (C - 1); (j > half - 1); j--) {
+		Symbol::getString(i, false, plaintext);
+		/*for (int j = (C - 1); (j > half - 1); j--) {
 			if (i == 0) {
 				plaintext[j] = 0;
 				continue;
@@ -152,7 +126,7 @@ void Symbol::decrypt(const std::string& encrypted) {
 					continue;
 				}
 			}
-		}
+		}*/
 		/*for (int s = 0; s < C; s++) {
 			cout << ALPHABET[plaintext[s]];
 		}
@@ -167,13 +141,16 @@ void Symbol::decrypt(const std::string& encrypted) {
 			cout << endl;
 		}*/
 		Key diff = toFind - result;
-		auto search = map.find(diff.getString());
+		int diffAsInt = Symbol::fromWordType(diff.m_digit, false);
+		auto search = map.find(diffAsInt);
 		if (search != map.end()) {
 			string resultAgain = diff.getString();
 			//cout << "Found!" << endl;
 			//cout << "First: " << search->first << endl;
 			//cout << "Second: " << search->second << endl;
-			Key combined = newKey + search->second;
+			Key conv(false);
+			Symbol::getString(search->second, true, conv.m_digit);
+			Key combined = newKey + conv;							//CONVERT HERE
 			//cout << "Combined: " << combined.getString() << endl;
 			cout << combined.getString() << endl;
 		}
@@ -236,6 +213,10 @@ int main(int argc, char *argv[]){
 	sym.decrypt(encrypted);
 	//cout << "Decrypted" << endl;
 
+	//word_type blah = { 26, 23, 28, 17, 10, 0, 0, 0, 0, 0};
+	//word_type blah = {0, 0, 0, 0, 0, 15, 31, 31, 31, 31};
+	//cout << "Int: " << sym.fromWordType(blah, false) << endl;
+	
 	/*Key firstHalf = Key(string("pasaa")).subset_sum(sym.T, verbose);
 	Key secondHalf = Key(string("aaasw")).subset_sum(sym.T, verbose);
 	Key encKey(encrypted);
@@ -300,4 +281,57 @@ int Symbol::pow(int x, int y) {
 		return pow(x, y / 2)*pow(x, y / 2);
 	else
 		return x*pow(x, y / 2)*pow(x, y / 2);
+}
+void Symbol::getString(int value, bool firstHalf, word_type &arrayOut) {
+	int half = C / 2;
+	if (C % 2 != 0)
+		half = half + 1;
+	int currValue = value;
+	int startIndex = 0, finishIndex = 0;
+	if (firstHalf) {
+		startIndex = (half -1 );
+		finishIndex = -1;
+	}
+	else {
+		startIndex = (C - 1);
+		finishIndex = (half - 1);
+	}
+	for (int j = startIndex; j > finishIndex; j--) {
+		if (currValue < R) {
+			arrayOut[j] = currValue;
+		}
+		else {
+			arrayOut[j] = currValue % R;
+			currValue = currValue / R;
+		}
+	}
+}
+int Symbol::fromWordType(word_type &value, bool firstHalf) {
+	int half = C / 2;
+	if (C % 2 != 0)
+		half = half + 1;
+	int startIndex = 0, finishIndex = 0;
+	int sum = 0;
+	if (firstHalf) {
+		startIndex = (half -1 );
+		finishIndex = -1;
+	}
+	else {
+		startIndex = (C - 1);
+		finishIndex = -1;
+	}
+	for (int j = startIndex; j > finishIndex; j--) {
+		int jInverse = 0;
+		if (firstHalf) {
+			jInverse = (half - j) - 1;
+		}
+		else {
+			jInverse = (C - j) - 1;
+		}
+		if (value[j] == 0) {
+			continue;
+		}
+		sum = sum + (value[j] * Symbol::pow(R, jInverse));
+	}
+	return sum;
 }
