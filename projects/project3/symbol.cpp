@@ -74,7 +74,18 @@ void Symbol::decrypt(const std::string& encrypted) {
 		}
 		newKey.m_digit = plaintext;
 		result = newKey.subset_sum(T, verbose);
-		if (plaintext[0] == 5 && plaintext[1] == 24 && plaintext[2] == )
+		if (plaintext[0] == 15 && plaintext[1] == 0 && plaintext[2] == 18) {
+			cout << "pass half" << endl;
+			for (int x = 0; x < C; x++) {
+				cout << ALPHABET[plaintext[x]];
+			}
+			cout << endl;
+			cout << "Result of pass encrypt:" << endl;
+			for (int x = 0; x < C; x++) {
+				cout << ALPHABET[result.m_digit[x]];
+			}
+			cout << endl;
+		}
 		//map.insert(result.getString(), WordToString(plaintext));
 		//string resStr = result.getString();
 		//string plainStr = WordToString(plaintext);
@@ -122,8 +133,20 @@ void Symbol::decrypt(const std::string& encrypted) {
 				}
 			}
 		}
+		/*for (int s = 0; s < C; s++) {
+			cout << ALPHABET[plaintext[s]];
+		}
+		cout << " ";
 		newKey.m_digit = plaintext;
 		result = newKey.subset_sum(T, verbose);
+		for (int s = 0; s < C; s++) {
+			cout << ALPHABET[result.m_digit[s]];
+		}
+		cout << endl;*/
+		Key sub = toFind - result;
+		if (sub.getString() == "jfwp0") {
+			cout << "HOLY SHIT" << endl;
+		}
 		Key diff = toFind - result;
 		auto search = map.find(diff.getString());
 		if (search != map.end()) {
@@ -136,6 +159,23 @@ void Symbol::decrypt(const std::string& encrypted) {
 			cout << "Blah: " << blah.getString() << endl;
 		}
 	}
+	//try and find in map
+	/*auto mapFind = map.find("jfwp0");
+	if (mapFind != map.end()) {
+		cout << "Found passw encrypted" << endl;
+		Key toSub = Key(mapFind->second);
+		Key encCopy = toFind - toSub;
+		cout << "Subtracted value" << endl;
+		for (int jack = 0; jack < C; jack++) {
+			cout << ALPHABET[encCopy.m_digit[jack]];
+		}
+		cout << endl;
+		/*cout << "First: " << mapFind->first << endl;
+		cout << "Second: " << mapFind->second << endl;*/
+	/*}
+	else {
+		cout << "Could not find passw encrypted" << endl;
+	}*/
 	cout << "Finished second loop" << endl;
 	int five = 5;
 }
@@ -176,6 +216,22 @@ int main(int argc, char *argv[]){
 	cout << "Created" << endl;
 	sym.decrypt(encrypted);
 	cout << "Decrypted" << endl;
+	/*Key b(string("bbbbb"));
+	Key a(string("aaaaa"));
+
+	Key sub = b - a;
+	cout << "Sub: " << sub.getString() << endl;
+
+	a = Key(string("bbbbb"));
+
+	sub = b - a;
+	cout << "Sub; " << sub.getString() << endl;
+
+	b = Key(string("cbccc"));
+	a = Key(string("bcbbb"));
+
+	sub = b - a;
+	cout << "Sub: " << sub.getString() << endl;*/
 	
 	// insert your code here
 	/*int* blah;

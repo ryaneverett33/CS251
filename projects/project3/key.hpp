@@ -183,7 +183,7 @@ inline Key Key::operator-(const Key& other) {
 		int res = m_digit[i] - other.m_digit[i];
 		if (res < 0 && i > 0) {
 			if (m_digit[i - 1] > 0) {
-				m_digit[i - 1] = m_digit[i] - 1;
+				m_digit[i - 1] = m_digit[i - 1] - 1;
 				res = res + R;
 			}
 		}
