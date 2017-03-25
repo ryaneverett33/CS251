@@ -48,8 +48,8 @@ void Symbol::decrypt(const std::string& encrypted) {
 		Symbol::getString(i, true, plaintext);
 		newKey.m_digit = plaintext;
 		result = newKey.subset_sum(T, verbose);
-		/*if (plaintext[0] == 15 && plaintext[1] == 0 && plaintext[2] == 18) {
-			cout << "pass half" << endl;
+		if (plaintext[0] == 15 && plaintext[1] == 0 && plaintext[2] == 18) {
+			/*cout << "pass half" << endl;
 			for (int x = 0; x < C; x++) {
 				cout << ALPHABET[plaintext[x]];
 			}
@@ -59,13 +59,13 @@ void Symbol::decrypt(const std::string& encrypted) {
 				cout << ALPHABET[result.m_digit[x]];
 			}
 			cout << endl;
-			look = true;
-		}*/
+			look = true;*/
+		}
 		//map.insert(result.getString(), WordToString(plaintext));
 		//string resStr = result.getString();
 		//string plainStr = WordToString(plaintext);
-		//map[result.getString()] = WordToString(plaintext);
-		map[Symbol::fromWordType(result.m_digit, true)] = i;
+		map[result.getString()] = WordToString(plaintext);
+		//map[Symbol::fromWordType(result.m_digit, true)] = i;
 		/*if (look) {
 			string exists = map[result.getString()];
 			if (exists.empty()) {
@@ -133,24 +133,24 @@ void Symbol::decrypt(const std::string& encrypted) {
 		cout << endl;*/
 		newKey.m_digit = plaintext;
 		result = newKey.subset_sum(T, verbose);
-		/*if (plaintext[3] == 18 && plaintext[4] == 22) {
-			cout << "pass other half" << endl;
+		if (plaintext[3] == 18 && plaintext[4] == 22) {
+			string s = result.getString();
+			/*cout << "pass other half" << endl;
 			for (int q = 0; q < C; q++) {
 				cout << ALPHABET[result.m_digit[q]];
 			}
-			cout << endl;
-		}*/
+			cout << endl;*/
+		}
 		Key diff = toFind - result;
-		int diffAsInt = Symbol::fromWordType(diff.m_digit, false);
-		auto search = map.find(diffAsInt);
+		string s = diff.getString();
+		int diffAsInt = Symbol::fromWordType(diff.m_digit, true);
+		auto search = map.find(diff.getString());
 		if (search != map.end()) {
 			string resultAgain = diff.getString();
 			//cout << "Found!" << endl;
 			//cout << "First: " << search->first << endl;
 			//cout << "Second: " << search->second << endl;
-			Key conv(false);
-			Symbol::getString(search->second, true, conv.m_digit);
-			Key combined = newKey + conv;							//CONVERT HERE
+			Key combined = newKey + Key(search->second);							//CONVERT HERE
 			//cout << "Combined: " << combined.getString() << endl;
 			cout << combined.getString() << endl;
 		}
