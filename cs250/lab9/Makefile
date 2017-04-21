@@ -1,2 +1,2 @@
 main : main.c
-	gcc -gstabs main.c -o main
+	gcc main.c -o main

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <malloc.h>
+//#include <malloc.h>
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string.h>
+
 
 #define READABLE_FILE "file_to_read.txt" /* File to be read during read operations */
 #define BYTES_TO_READ_WRITE 819200 /* 800 KB */
@@ -40,6 +41,7 @@ char read_buf[MAX_BUFFER];
 char* rp = &read_buf[0];
 int read_buf_size;
 int rePoint = 0;
+int read_count = 0;
 
 /* Main function starts */
 int main()
@@ -122,11 +124,15 @@ int main()
                 begin = clock();
                 for (i=0;i<bytes_to_read;i++)
                 { /* you may need to modify this slightly to print the character received and also check for end of file */
-                    if(mygetc() == -1)
+                    int gets = mygetc();
+                    if(gets == -1)
                     {
                         printf("\n End of file \n");
                         break;
                     }
+                    /*else {
+                    	printf("%c", gets);
+                    }*/
                 }
                 end = clock();
                 if(close(fd_read))
@@ -162,6 +168,7 @@ void mywritebufsetup(int n) {
 	else {
 		write_buf_size = n;
 	}
+    read_count = 0;
 }
 void myputc(char c){
 	//puts("Increasing wrPointer");
@@ -210,8 +217,32 @@ void myreadbufsetup(int n){
 	else {
 		read_buf_size = n;
 	}
+    read_count = 0;
+    rePoint = 0;
 }
 int mygetc() {
-	
+    //refresh the buffer
+    if (read_count <= 0) {
+        read_count = read(fd_read, read_buf, read_buf_size);
+        rp = &read_buf[0];
+        rePoint = 0;
+    }
+    if (read_count == 0) {
+        return -1;
+    }
+    else {
+        char c = read_buf[rePoint];
+        /*if (c == '?') {
+            printf("c: %d, read_count: %d, *rp: %c rePoint: %d\n", c, read_count, *rp, rePoint);
+        }*/
+        //printf("%c", c);
+        read_count = read_count - 1;
+        rp = &read_buf[rePoint + 1];
+        rePoint = rePoint + 1;
+        //printf("rp: %c\n", *rp);
+        //return c;
+        //Don't know why we do this...
+        return c & 0x0000FFFF;
+    }
 }
 
