@@ -1,9 +1,5 @@
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
+
+import java.io.*;
 import java.util.*;
 
 public class BurrowsWheeler {
@@ -24,8 +20,8 @@ public class BurrowsWheeler {
 
         for (int i = 0; i < read.length(); i++) {
             if (suffix.getIndex(i) == 0) {
-                //BinaryStdOut.write(i);
-                System.out.println(Integer.toString(i));
+                //System.out.println(i);
+                BinaryStdOut.write(i);
                 break;
             }
         }
@@ -47,8 +43,8 @@ public class BurrowsWheeler {
             }*/
             //System.out.print(readSplit[(suffix.getIndex(i) + readSplit.length -1) % readSplit.length]);
             //System.out.print(" ");
-            System.out.print(read.charAt((suffix.getIndex(i) + read.length() -1) % read.length()));
-            //BinaryStdOut.write(read.charAt((suffix.getIndex(i) + read.length() -1) % read.length()));
+            //System.out.print(read.charAt((suffix.getIndex(i) + read.length() -1) % read.length()));
+            BinaryStdOut.write(read.charAt((suffix.getIndex(i) + read.length() -1) % read.length()));
         }
         //Don't forget to flush out
         BinaryStdOut.close();
@@ -88,11 +84,11 @@ public class BurrowsWheeler {
     	if (args[0].equals("-")) {
             //encode
             System.setIn(new ByteArrayInputStream("ABRACADABRA!".getBytes()));
-            //System.setIn(new ByteArrayInputStream("41 42 52 41 43 41 44 41 42 52 41 21".getBytes()));
             encode();
         }
         else if (args[0].equals("+")) {
             //decode
+            //System.setIn(new ByteArrayInputStream("ARD!RCAAAABB".getBytes()));
             decode();
         }
     }

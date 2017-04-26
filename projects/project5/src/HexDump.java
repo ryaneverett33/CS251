@@ -27,6 +27,7 @@ public class HexDump {
             else if (i % BYTES_PER_LINE == 0) StdOut.printf("\n", i);
             else StdOut.print(" ");
             char c = BinaryStdIn.readChar();
+            if (c == 32) { c = 0; }         //To fix intellij debugging
             StdOut.printf("%02x", c & 0xff);
         }
         if (BYTES_PER_LINE != 0) StdOut.println();
