@@ -1,187 +1,172 @@
-
-import java.io.*;
-import java.util.*;
-
 public class BurrowsWheeler {
-    public static final int R = 256;
-    // apply Burrows-Wheeler encoding, reading from standard input and writing to standard output
-    //transform
-    public static void encode() throws Exception
+    // apply Burrows-Wheeler encoding, 
+    //reading from standard input and writing to standard output
+    //private BurrowsWheeler()
+    //{}
+    public static void encode()
     {
-        String read = BinaryStdIn.readString();
-        System.out.println("Read: " + read);
-        /*String[] readSplit = read.split(" ");
-        ArrayList<Integer> textList = new ArrayList<>(readSplit.length);
-        for (int i = 0; i < readSplit.length; i++) {
-            textList.add(Integer.parseInt(readSplit[i]));
+        String s = BinaryStdIn.readString();
+        CircularSuffixArray csa = new CircularSuffixArray(s);
+        
+        int length = s.length();
+        int original = 0;
+        char[] code = new char[length];
+        for (int i = 0; i < length; i++)
+        {
+            if (csa.index(i) == 0) original = i;
+            code[i] = s.charAt((csa.index(i) -1 + length) % length);
         }
-        Suffix suffix = new Suffix(toPrimitiveArray(textList));*/
-        Suffix suffix = new Suffix(read);
-
-        for (int i = 0; i < read.length(); i++) {
-            if (suffix.getIndex(i) == 0) {
-                //System.out.println(i);
-                BinaryStdOut.write(i);
-                break;
-            }
+        BinaryStdOut.write(original);
+        for (int i = 0; i < length; i++)
+        {
+            BinaryStdOut.write(code[i]);
         }
-        for (int i = 0; i < read.length(); i++) {
-        //for (int i = 0; i < readSplit.length; i++) {
-            /*if ((suffix.getIndex(i) - 1) < 0) {
-                BinaryStdOut.write(read.charAt(read.length() - 1));
-                System.out.print(' ');
-            }
-            else {
-                BinaryStdOut.write(read.charAt(suffix.getIndex(i) - 1));
-                System.out.print(' ');
-            }*/
-            /*if (suffix.getIndex(i) - 1 < 0) {
-
-            }
-            else {
-                System.out.print(read.)
-            }*/
-            //System.out.print(readSplit[(suffix.getIndex(i) + readSplit.length -1) % readSplit.length]);
-            //System.out.print(" ");
-            //System.out.print(read.charAt((suffix.getIndex(i) + read.length() -1) % read.length()));
-            BinaryStdOut.write(read.charAt((suffix.getIndex(i) + read.length() -1) % read.length()));
-        }
-        //Don't forget to flush out
         BinaryStdOut.close();
     }
-    // apply Burrows-Wheeler decoding, reading from standard input and writing to standard output
-    public static void decode() throws Exception
+
+    private Letter[] kic(Letter[] a)
     {
-        int start = BinaryStdIn.readInt();
-        String read = BinaryStdIn.readString();
-
-        int[] next = new int[read.length()];
-        int[] count = new int[R + 1];
-        int n = read.length();
-
-        for (int i = 0; i < n; i++) {
-            count[read.charAt(i) + 1] = count[read.charAt(i) + 1] + 1;
+        int R = 256;
+        int N = a.length;
+        Letter[] aux = new Letter[N];
+        int[] count = new int[R+1];
+        for (int i = 0; i < N; i++)
+            count[a[i].ch+1]++;
+        
+        for (int r = 0; r < R; r++)
+            count[r+1] += count[r];
+        for (int i = 0; i < N; i++)
+            aux[count[a[i].ch]++] = a[i];
+        return aux;
+    }
+    
+    private class Letter
+    {
+        private char ch;
+        private int ind;
+        public Letter(char c, int i)
+        {
+            this.ch = c;
+            this.ind = i;
         }
-
-        for (int i = 0; i < R; i++) {
-            count[i+1] = count[i] + count[i+1];
+    }
+    private char[] decode(int start, String s)
+    {
+        int length = s.length();
+        
+        
+        Letter[] input = new Letter[length];
+        for (int i = 0; i < length; i++)
+        {
+            input[i] = new Letter(s.charAt(i), i);
         }
-
-        for (int i = 0; i < n; i++) {
-            next[count[read.charAt(i)]++] = i;
+        Letter[] sorted = kic(input);
+        int[] next = new int[length];
+        
+        for (int i = 0; i < length; i++)
+        {
+            next[i] = sorted[i].ind;
         }
-
-        for (int i = 0; i < read.length(); i++) {
-            BinaryStdOut.write(read.charAt(next[start]));
+        
+        char[] text = new char[length];
+        
+        for (int i = 0; i < length; i++)
+        {
+            text[i] = sorted[start].ch;
             start = next[start];
         }
+        
+        return text;
+    }
+    
+    
+    
+    // apply Burrows-Wheeler decoding, 
+    //reading from standard input and writing to standard output
+    public static void decode()
+    {
+        int start = BinaryStdIn.readInt();
+        
+        String s = BinaryStdIn.readString();
+        
+        BurrowsWheeler bw = new BurrowsWheeler();
+        
+        for (char c : bw.decode(start, s))
+        {
+            BinaryStdOut.write(c);
+        }
+        
         BinaryStdOut.close();
     }
+
     // if args[0] is '-', apply Burrows-Wheeler encoding
     // if args[0] is '+', apply Burrows-Wheeler decoding
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args)
     {
-    	if (args[0].equals("-")) {
-            //encode
-            System.setIn(new ByteArrayInputStream("ABRACADABRA!".getBytes()));
-            encode();
-        }
-        else if (args[0].equals("+")) {
-            //decode
-            //System.setIn(new ByteArrayInputStream("ARD!RCAAAABB".getBytes()));
-            decode();
-        }
-    }
-    //fuck java
-    public static int[] toPrimitiveArray(ArrayList<Integer> list) {
-        int[] arr = new int[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            arr[i] = list.get(i);
-        }
-        return arr;
+        if (args[0].equals("-")) encode();
+        else if (args[0].equals("+")) decode();
+        else throw new IllegalArgumentException("Illegal command line argument");
     }
 }
-class Suffix {
-    public SuffixItem[] array;
-    public String text;
 
-    //public int[] text;
+class CircularSuffixArray {
+    private int[] indecies;
+    private String str;
+    private int length;
 
-    private class SuffixItem  implements Comparable<SuffixItem> {
-        private int index;
+    public CircularSuffixArray(String s)  // circular suffix array of s
+    {
+        str = s;
+        length = s.length();
+        indecies = new int[length];
 
-        public SuffixItem(int index) {
-            this.index = index;
+        Suffix[] suffixes = new Suffix[length];
+        for (int i = 0; i < length; i++) {
+            suffixes[i] = new Suffix(i);
+        }
+        java.util.Arrays.sort(suffixes);
+
+
+        for (int i = 0; i < length; i++) {
+            indecies[i] = suffixes[i].startAt;
+        }
+    }
+
+    private class Suffix implements Comparable {
+        private int startAt;
+
+        public Suffix(int start) {
+            this.startAt = start;
         }
 
-        //Get Character in Array at index 'i'
-        //private char getChar(int i) {
-        private int getChar(int i) {
-            //if ((i + index) < text.length) {
-            if ((i + index) < text.length()) {
-                return text.charAt(index + i);
-                //return text[index + i];
-            }
-            else {
-                //return text[(index + i) - text.length];
-                return text.charAt((index + i) - text.length());
-            }
+        public char charAt(int position) {
+            return str.charAt((position + startAt) % length);
         }
 
-        private int getIndex() { return this.index; }
-
-        //Required by implementing the Comparable interface
-        //Just compares two SuffixItems
-        //return -1 if other is greater than this
-        //return 0 if both are equal
-        //return 1 if this is greater than other
-        public int compareTo(SuffixItem other) {
-            //for (int i = 0; i < text.length; i++) {
-            for (int i = 0; i < text.length(); i++) {
-                if (this.getChar(i) > other.getChar(i)) {
+        public int compareTo(Object another) {
+            Suffix that = (Suffix) another;
+            for (int i = 0; i < length; i++) {
+                char a = this.charAt(i);
+                char b = that.charAt(i);
+                if (a > b)
                     return 1;
-                }
-                if (this.getChar(i) < other.getChar(i)) {
+                else if (a < b)
                     return -1;
-                }
             }
             return 0;
+
         }
+
     }
 
-    //public Suffix(int[] text) throws Exception {
-    public Suffix(String text) throws Exception {
-        if (text == null) {
-            throw new Exception("Text is null!");
-        }
-        this.text = text;
-        //this.array = new SuffixItem[text.length];
-        this.array = new SuffixItem[text.length()];
 
-        for (int i = 0; i < text.length(); i++) {
-        //for (int i = 0; i < text.length; i++) {
-            this.array[i] = new SuffixItem(i);
-        }
-        Arrays.sort(this.array);
+    public int length()                   // length of s
+    {
+        return length;
     }
-    /*public Suffix(String text) throws Exception {
-        //Check for null
-        if (text == null) {
-            throw new Exception("Text is null!");
-        }
-        this.text = text;
-        this.array = new SuffixItem[text.length()];
-        //fill up array
-        for (int i = 0; i < text.length(); i++) {
-            this.array[i] = new SuffixItem(i);
-        }
-        Arrays.sort(this.array);
-    }*/
-    public int getIndex(int index) throws Exception {
-        //if (index < 0 || index >= text.length) {
-        if (index < 0 || index >= text.length()) {
-            throw new Exception("Index out of bounds");
-        }
-        return array[index].getIndex();
+
+    public int index(int i)               // returns index of ith sorted suffix
+    {
+        return indecies[i];
     }
 }
