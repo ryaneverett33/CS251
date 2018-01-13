@@ -20,6 +20,7 @@ public class BurrowsWheeler {
         BinaryStdOut.close();
     }
 
+    //Sort the array by LSB
     static Node[] sortArr(Node[] a) {
         int R = 256;
         int N = a.length;
@@ -29,12 +30,22 @@ public class BurrowsWheeler {
             count[a[i].c + 1]++;
         }
 
-        for (int r = 0; r < R; r++) {
-            count[r + 1] += count[r];
+        /*
+        for (int j = 0; j < R; j++) {
+            aux[j+1] += aux[j];
+        ]
+         */
+        for (int j = 0; j < R; j++) {
+            count[j + 1] += count[j];
         }
         for (int i = 0; i < N; i++) {
             aux[count[a[i].c]++] = a[i];
         }
+        /*
+        if (count.length == a.length) {
+            return count;
+        }
+         */
         return aux;
     }
 
@@ -46,36 +57,17 @@ public class BurrowsWheeler {
             this.c = c;
             this.index = i;
         }
+
+        public char getChar() {
+            return c;
+        }
+        public int getIndex() {
+            return index;
+        }
     }
+
 
     // apply Burrows-Wheeler decoding, reading from standard input and writing to standard output
-    private char[] decode(int start, String s) {
-        int length = s.length();
-
-        Node[] input = new Node[length];
-        for (int i = 0; i < length; i++) {
-            input[i] = new Node(s.charAt(i), i);
-        }
-        Node[] sorted = sortArr(input);
-        int[] next = new int[length];
-
-        for (int i = 0; i < length; i++) {
-            next[i] = sorted[i].index;
-        }
-
-        char[] text = new char[length];
-
-        for (int i = 0; i < length; i++) {
-            text[i] = sorted[start].c;
-            start = next[start];
-        }
-
-        return text;
-    }
-
-
-    // apply Burrows-Wheeler decoding, 
-    //reading from standard input and writing to standard output
     public static void decode() {
         int start = BinaryStdIn.readInt();
 
@@ -85,23 +77,30 @@ public class BurrowsWheeler {
         for (int i = 0; i < read.length(); i++) {
             input[i] = new Node(read.charAt(i), i);
         }
+        //Sort the array, and then retrieve the string at the location
+
         Node[] sorted = sortArr(input);
         int[] next = new int[read.length()];
+
+        //Node[] sorted = sortArray(read);
+        //int next = 0;
 
         for (int i = 0; i < read.length(); i++) {
             next[i] = sorted[i].index;
         }
 
         char[] text = new char[read.length()];
+        /*
+        for (int i = 0; i < read.length(); i++) {
+            read[i] = sorted[start].c;
+            start = next[start];
+        }
+         */
 
         for (int i = 0; i < read.length(); i++) {
             text[i] = sorted[start].c;
             start = next[start];
         }
-
-        /*for (char c : bw.decode(start, s)) {
-            BinaryStdOut.write(c);
-        }*/
 
         BinaryStdOut.close();
     }
@@ -152,7 +151,12 @@ class SuffixItemArray {
             this.start = start;
         }
 
+        /*
         public char charAt(int pos) {
+            return value.charAt((pos + start) % length);
+        }
+         */
+        public char getChar(int pos) {
             return value.charAt((pos + start) % length);
         }
 
@@ -162,8 +166,8 @@ class SuffixItemArray {
                 return 0;
             }
             for (int i = 0; i < length; i++) {
-                char a = this.charAt(i);
-                char b = that.charAt(i);
+                char a = this.getChar(i);
+                char b = that.getChar(i);
                 if (a > b) {
                     return 1;
                 } else if (a < b) {
@@ -176,12 +180,7 @@ class SuffixItemArray {
 
     }
 
-
-    public int length()                   // length of s
-    {
-        return length;
-    }
-
+    //Just a regular old getter
     public int getIndex(int i) {
         return indexexes[i];
     }
